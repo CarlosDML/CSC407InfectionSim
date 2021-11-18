@@ -17,7 +17,8 @@ public class Csc407GroupProject {
      * @param args the command line arguments
      */
     //1. Initialize array for population
-    public static boolean[] popInfected = new boolean[1000];
+    public static int[] popInfected = new int[1000];
+    public static int[] popImmune = new int[1000];
 
     //initialise round counter, and infected counter;
     public static int rounds = 2000;
@@ -27,60 +28,62 @@ public class Csc407GroupProject {
     public static void main(String[] args) {
 
         //first infected indavidual
-        popInfected[1] = true;
+        popInfected[1] = 1;
 
         //2. initialize contact variable between 0 and 1. and threashhold for contact
         double contact;
-        double contactThreashold = 0.005;
         //2. used for finding random number between 0 and 1
         contact = Math.random();
-
         //3. Initialize Infection variable between 0 and 1 and threashholt for infection
-        double infected;
-        double infectedThreashhold = 0.01;
+        double infectedThreashhold = 0.001;
         //3. Used for finding random number between 0 and 1
-        infected = Math.random();
+        //infectedThreashhold = Math.random();
 
+        //4. main loop for running round method and reader method
+        for(int i = 0; i < 2000; i++){
+        infectionRounds(contact, infectedThreashhold);
         numberInfected();
+        }
     }
 
     //4. Method for outputing and find the number if infected each round for 2000 rounds
     public static void numberInfected() {
         for (int i = 0; i < popInfected.length; i++) {
-            if (popInfected[i] == true) {
+            if (popInfected[i] > 0) {
                 infectedCounter++;
             }
         }
         System.out.println(infectedCounter);
+        infectedCounter = 0;
     }
 
-    public static boolean[] infectionRounds(double contact, double infectedThreashhold, boolean[] popInfected) {
+    public static void infectionRounds(double contact, double infectedThreashhold) {
         //Initialize variable needed
         int contactWith;
         double infect;
         //First loop goes through all 1000 people
         for (int i = 0; i < 1000; i++) {
 
-            //finds the ratio of people needed the person will come into contact with
+            //2. finds the ratio of people needed the person will come into contact with
             contact = Math.random();
-            contact = 1000 / contact;
-
+            contact = (int)(1000 * contact);
             //checks if the indavidual is infected
-            if (popInfected[i] == true) {
+            if (popInfected[i] > 0) {
 
                 //loop for infected indavidual
                 for (int j = 0; j < contact; j++) {
                     //random person to be in contact with
                     contactWith = (int) (Math.random() * 1000) + 0;
 
-                    //checks if the person they come into contact with is infected, if not moves on
-                    if (popInfected[contactWith] == false) {
-                        //infection chance
+                    //checks if the person they come into contact with is infected, and not immune if not moves on
+                    if (popInfected[contactWith] == 0 && popImmune[contactWith] == 0) {
+                        //3. infection chance
                         infect = Math.random();
 
-                        //checks if it meets threashhold
-                        if (infect > infectedThreashhold) {
-                            popInfected[contactWith] = true;
+                        //3. checks if it meets threashhold
+                        if (infect < infectedThreashhold) {
+                            popInfected[contactWith] = 1;
+                            
                         }
 
                     }
@@ -92,23 +95,47 @@ public class Csc407GroupProject {
                     //random person they will come into contact with
                     contactWith = (int) (Math.random() * 1000) + 0;
 
-                    //checks if they are infected if not move on
-                    if (popInfected[contactWith] == true) {
+                    //checks if they are infected, and no one is Immune, if not move on
+                    if (popInfected[contactWith] > 0) {
                         //infection chance
                         infect = Math.random();
 
                         //checks if it meet threashhold
-                        if (infect > infectedThreashhold) {
-                            popInfected[contactWith] = true;
+                        if (infect < infectedThreashhold) {
+                            popInfected[contactWith] = 1;
                         }
 
                     }
                 }
             }
 
+            
         }
-
-        //return updated array after 1 round
-        return popInfected;
+        //At the end of the round array infected is updated to next round and check if the person is immune
+        for(int i = 0; i < 1000; i++){
+            //checks if they are infected, if they are increases their counter by 1
+            if (popInfected[i] > 0){
+                popInfected[i]++;
+                //if there infected for more that 5 rounds resets their infected counter and start their immune counter
+                if(popInfected[i] > 5){
+                    popInfected[i] = 0;
+                    popImmune[i] = 1;
+                }
+            }
+        }
+        //At the end of the round all people Immune are updated
+        for(int i = 0;  i < 1000; i++){
+            //check if person has immunity, and if they do increases its counter by 1
+            if(popImmune[i] != 0){
+                popImmune[i]++;
+                //if they reach 5+ then resets their immunity to 0 so they can be infected again also resets their infected counter
+                if(popImmune[i] > 5){
+                    popImmune[i] = 0;
+                    
+                }
+            }
+        }
+        
+        
     }
 }
