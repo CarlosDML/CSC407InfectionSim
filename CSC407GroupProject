@@ -45,6 +45,7 @@ public class Csc407GroupProject {
         infectionRounds(contact, infectedThreashhold);
         numberInfected();
         roundInfected[i] = infectedCounter;
+            //System.out.println(roundInfected[i]);
         }
 
     linearRegression();
@@ -146,15 +147,38 @@ public class Csc407GroupProject {
     }
     
     public static void linearRegression(){
-        int x, y, xy, x2, y2, eX, eY, eXY, eX2, eY2;
+        double x=0, y = 0, x2=0, y2=0, eX, eY = 0, eXY=0, eX2=0, eY2=0;
+        double a = 0;
+        double b = 0;
         eX = 2001000;
         
-        for (int i = 0; i < 2001; i++){
-            
+        //sum for all y values
+        for (int i = 0; i < 2000; i++){
+            eY = eY + roundInfected[i];
         }
+        //System.out.println(eY);
+        // for all X*y
+        for (int i = 0; i < 2000; i++){
+            y = roundInfected[i];
+            eXY = eXY + (i * y);
+        }
+        //System.out.println(eXY);
+        //sum for all x sqaured
+        for (int i = 0; i < 2000; i++){
+            x2 = i * i;
+            eX2 = eX2 + x2;
+        }
+        //System.out.println(eX2);
+        // sum for all y sqaured
+        for (int i = 0; i < 2000; i++){
+            y2 = roundInfected[i] * roundInfected[i];
+            eY2 = eY2 + y2;
+        }
+        //System.out.println(eY2);
         
-        
-        
-        
+        a = ((eY * eX2) - (eX * eXY)) / (2000 * (eX2 - (eX * eX)));
+        b = ((2000 * eXY) - (eX * eY)) / (2000 * (eX2 - (eX * eX)));
+        System.out.println(a);
+        System.out.println(b);
     }
 }
