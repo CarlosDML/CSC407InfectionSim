@@ -16,9 +16,10 @@ public class Csc407GroupProject {
     /**
      * @param args the command line arguments
      */
-    //1. Initialize array for population
+    //1. Initialize array for population, and immunity, and saves number of infected each round
     public static int[] popInfected = new int[1000];
     public static int[] popImmune = new int[1000];
+    public static int[] roundInfected = new int [2000];
 
     //initialise round counter, and infected counter;
     public static int rounds = 2000;
@@ -40,21 +41,26 @@ public class Csc407GroupProject {
         //infectedThreashhold = Math.random();
 
         //4. main loop for running round method and reader method
-        for(int i = 0; i < 2000; i++){
+        for(int i = 0; i < rounds; i++){
         infectionRounds(contact, infectedThreashhold);
         numberInfected();
+        roundInfected[i] = infectedCounter;
         }
+
+    linearRegression();
     }
 
     //4. Method for outputing and find the number if infected each round for 2000 rounds
     public static void numberInfected() {
+        infectedCounter = 0;
         for (int i = 0; i < popInfected.length; i++) {
             if (popInfected[i] > 0) {
                 infectedCounter++;
             }
         }
+        
         System.out.println(infectedCounter);
-        infectedCounter = 0;
+        
     }
 
     public static void infectionRounds(double contact, double infectedThreashhold) {
@@ -135,6 +141,19 @@ public class Csc407GroupProject {
                 }
             }
         }
+        
+        
+    }
+    
+    public static void linearRegression(){
+        int x, y, xy, x2, y2, eX, eY, eXY, eX2, eY2;
+        eX = 2001000;
+        
+        for (int i = 0; i < 2001; i++){
+            
+        }
+        
+        
         
         
     }
